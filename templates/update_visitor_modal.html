@@ -1,0 +1,51 @@
+<div class="modal fade" id="updateVisitorModal" tabindex="-1" role="dialog"
+     aria-labelledby="updateVisitorModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateVisitorModalLabel">แก้ไขรายชื่อผู้มาติดต่อ</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="p-1">
+                            <form class="needs-validation" novalidate id="updateVisitorForm"
+                                  action="/api/visitor" method="PUT" enctype="multipart/form-data">
+                                <input type="hidden" id="updateVisitorId" name="updateVisitorId" readonly>
+                                <div class="form-group">
+                                    <label for="updateVisitorTitle" class="form-label">ชื่อผู้มาติดต่อ</label>
+                                    <input type="text" class="form-control form-control-user" id="updateVisitorTitle"
+                                           name="updateVisitorTitle"
+                                           placeholder="ชื่อผู้มาติดต่อ" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="updateVisitorStatus" class="form-label">สถานะการเข้า / ออก</label>
+                                    <select class="form-control form-control-user" id="updateVisitorStatus"
+                                            name="updateVisitorStatus">
+                                        <option value="APPROVED" selected>อนุญาติ</option>
+                                        <option value="REJECTED">ปฏิเสธ</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="updateVisitorReason" class="form-label">รายละเอียด</label>
+                                    <textarea rows="5" class="form-control form-control-user" id="updateVisitorReason"
+                                              name="updateVisitorReason"
+                                              placeholder="รายละเอียด"></textarea>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
+                <button id="btnUpdateVisitor" class="btn btn-primary">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 id="visitorTitleHeader" class="m-0 font-weight-bold text-primary">รายชื่อผู้มาติดต่อย้อนหลัง 30 วัน</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered nowrap" id="visitorDataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th></th>
+                    <th>บ้านเลขที่</th>
+                    <th>ชื่อ</th>
+                    <th>รายละเอียดการมาติดต่อ</th>
+                    <th>ทะเบียนรถยนต์ / รถจักรยานยนต์</th>
+                    <th>สถานะการเข้า / ออก</th>
+                    <th>หมายเหตุ</th>
+                    <th>รูปภาพ</th>
+                    <th>เพิ่มโดย</th>
+                    <th>วันที่เพิ่ม</th>
+                    <th>แก้ไขโดย</th>
+                    <th>วันที่แก้ไข</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set row_num = namespace(value=0) %}
+                {% for visitor in visitors %}
+                    <tr>
+                        <td>{{ row_num.value + 1 }}</td>
+                        <td>
+                            {% if visitor.visitor_status == 'VISITING' %}
+                                <a href="#" class="btn btn-primary btn-sm"
+                                   onclick="updateData('Visitor','visitor',{{ visitor.visitor_id }})">
+                                    <i class="fas fa-cogs"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if visitor.household_no != None %}
+                                {{ visitor.household_no }}
+                            {% else %}
+                                ไม่ระบุ
+                            {% endif %}
+                        </td>
+                        <td id="row_visitor_name_{{ visitor.visitor_id }}">{{ visitor.visitor_name }}</td>
+                        <td class="text-wrap">{{ visitor.visitor_description }}</td>
+                        <td>{{ visitor.vehicle_license_plate }}</td>
+                        <td>
+                            {% if visitor.visitor_status == 'VISITING' %}
+                                <span class="border-bottom-primary">กำลังอยู่ในหมู่บ้าน</span>
+                            {% elif visitor.visitor_status == 'APPROVED' %}
+                                <span class="border-bottom-success">อนุญาติ</span>
+                            {% elif visitor.visitor_status == 'REJECTED' %}
+                                <span class="border-bottom-danger">ปฏิเสธ</span>
+                            {% endif %}
+                        </td>
+                        <td>{% if visitor.visitor_remark != None %}
+                            {{ visitor.visitor_remark }}
+                        {% endif %}
+                        </td>
+                        <td>
+                            {% if visitor.visitor_image != None %}
+                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                                   data-target="#imagePreviewModal"
+                                   onclick="showImage('รูปผู้มาติดต่อ','{{ visitor.visitor_image }}')">
+                                    <i class="fas fa-camera"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>{{ visitor.created_by }}</td>
+                        <td>{{ visitor.created_datetime }}</td>
+                        <td>{{ visitor.updated_by }}</td>
+                        <td>{{ visitor.updated_datetime }}</td>
+                    </tr>
+
+                    {% set row_num.value = row_num.value + 1 %}
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

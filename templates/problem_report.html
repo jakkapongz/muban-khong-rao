@@ -1,0 +1,173 @@
+{% extends "index.html" %}
+
+{% block custom_css %}
+    <!-- Custom styles for this page -->
+    <link href="{{ url_for('static', filename='sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.css') }}"
+          rel="stylesheet">
+    <link href="{{ url_for('static', filename='mubankhongrao.css') }}"
+          rel="stylesheet">
+    <link href="{{ url_for('static', filename='sb-admin-2/vendor/css/responsive.bootstrap4.min.css') }}"
+          rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-2 text-gray-800">แจ้งปัญหาหมู่บ้าน</h1>
+        <button id="btnAddProblemModal" class="btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-plus fa-sm text-white-50"></i> แจ้งปัญหาหมู่บ้าน</button>
+    </div>
+
+    {% include "problem_report_table.html" %}
+
+    <div class="modal fade" id="addProblemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">แจ้งปัญหาหมู่บ้าน</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="p-1">
+                                <form class="needs-validation" novalidate id="addProblemForm"
+                                      action="/problem-reports" method="post" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="reportTitle">หัวข้อ</label>
+                                        <input type="text" class="form-control" id="reportTitle" name="reportTitle"
+                                               placeholder="หัวข้อ" required>
+                                         <div class="invalid-feedback">
+                                            โปรดระบุหัวข้อของปัญหา
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="reportDescription">รายละเอียด</label>
+                                        <textarea rows="5" class="form-control" id="reportDescription"
+                                                  placeholder="รายละเอียด" required></textarea>
+                                        <div class="invalid-feedback">
+                                            โปรดระบุรายละเอียดของปัญหา
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="problemCategory">หมวด</label>
+                                        <select class="form-control" id="problemCategory" name="problemCategory">
+                                            {% for problem_category in problem_categories %}
+                                                <option value="{{ problem_category.problem_category_id }}">{{ problem_category.category_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="problemImage">รูปภาพ</label>
+                                        <input type="file" class="form-control-file" id="problemImage"
+                                               name="problemImage">
+                                        <input type="hidden" id="problemImageBase64" name="problemImageBase64">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
+                    <a id="btnAddProblem" class="btn btn-primary">ตกลง</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "image_preview_modal.html" %}
+
+    {% include "update_problem_report.html" %}
+
+
+{% endblock %}
+
+{% block custom_js %}
+    <!-- Page level plugins -->
+
+    <script src="{{ url_for('static', filename='sb-admin-2/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='sb-admin-2/vendor/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='sb-admin-2/vendor/datatables/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='mubankhongrao.js') }}"></script>
+
+    <script>
+
+        function updateProblem(problem_category_id) {
+
+            const problem_title = $('#row_problem_title_' + problem_category_id).text()
+
+            $('#updateProblemId').val(problem_category_id)
+            $('#updateProblemTitle').val(problem_title)
+
+            $('#updateProblemModal').modal('show');
+        }
+
+        // Call the dataTables jQuery plugin
+        $(document).ready(function () {
+
+            $('#btnAddProblemModal').click(function (){
+                $('#reportTitle').val('')
+                $('#reportDescription').val('')
+                $('#problemCategory').val('1')
+                $('#problemImageBase64').val('')
+
+                const addProblemForm = $('#addProblemForm')[0];
+                addProblemForm.classList.remove('was-validated')
+                $('#addProblemModal').modal('show');
+            });
+
+            $('#btnAddProblem').click(function () {
+
+                const addProblemForm = $('#addProblemForm')[0];
+
+                if (!addProblemForm.checkValidity()) {
+                    addProblemForm.classList.add('was-validated')
+                    return;
+                }
+
+                const problem = {
+                    'problem_report_title': $('#reportTitle').val(),
+                    'problem_report_description': $('#reportDescription').val(),
+                    'problem_category_id': $('#problemCategory').val(),
+                    'problem_image': $('#problemImageBase64').val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/problem-report",
+                    data: problem,
+                    dataType: "json",
+                }).done(function (data) {
+                    alert('บันทึกสำเร็จ')
+                    $('#addProblemModal').modal('hide');
+                    location.reload();
+                }).fail(function (data){
+                    alert('เกิดข้อผิดพลาด')
+                });
+
+
+            });
+
+            $('#problemImage').change(function () {
+                if (this.files.length > 0) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(this.files[0]);
+                    reader.onload = function () {
+                        $('#problemImageBase64').val(reader.result)
+                    };
+                } else {
+                    $('#problemImageBase64').val('')
+                }
+            });
+
+
+        });
+
+    </script>
+
+{% endblock %}

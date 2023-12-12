@@ -1,0 +1,47 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 id="patrollingReportTitleHeader" class="m-0 font-weight-bold text-primary">รายการการเดินตรวจตราย้อนหลัง 30 วัน</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered nowrap" id="patrollingReportDataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th>หัวข้อ</th>
+                    <th>รายละเอียด</th>
+                    <th>รูปภาพ</th>
+                    <th>เพิ่มโดย</th>
+                    <th>วันที่เพิ่ม</th>
+                    <th>แก้ไขโดย</th>
+                    <th>วันที่แก้ไข</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set row_num = namespace(value=0) %}
+                {% for patrolling_report in patrolling_reports %}
+                    <tr>
+                        <td>{{ row_num.value + 1 }}</td>
+                        <td>{{ patrolling_report.patrolling_title }}</td>
+                        <td class="text-wrap">{{ patrolling_report.patrolling_description }}</td>
+                        <td>
+                            {% if patrolling_report.patrolling_image != None %}
+                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                                   data-target="#imagePreviewModal"
+                                   onclick="showImage('รูปการเดินตรวจตรา','{{ patrolling_report.patrolling_image }}')">
+                                    <i class="fas fa-camera"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>{{ patrolling_report.created_by }}</td>
+                        <td>{{ patrolling_report.created_datetime }}</td>
+                        <td>{{ patrolling_report.updated_by }}</td>
+                        <td>{{ patrolling_report.updated_datetime }}</td>
+                    </tr>
+                    {% set row_num.value = row_num.value + 1 %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

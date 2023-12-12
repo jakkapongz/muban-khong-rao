@@ -1,0 +1,51 @@
+<div class="modal fade" id="updateProblemModal" tabindex="-1" role="dialog"
+     aria-labelledby="updateProblemModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateProblemModalLabel">แก้ไขรายละเอียดปัญหาหมู่บ้าน</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="p-1">
+                            <form class="needs-validation" novalidate id="updateProblemForm"
+                                  action="/api/problem-report" method="PUT" enctype="multipart/form-data">
+                                <input type="hidden" id="updateProblemId" name="updateProblemId" readonly>
+                                <div class="form-group">
+                                    <label for="updateProblemTitle" class="form-label">หัวข้อ</label>
+                                    <input type="text" class="form-control form-control-user" id="updateProblemTitle"
+                                           name="updateProblemTitle"
+                                           placeholder="หัวข้อ" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="updateProblemStatus" class="form-label">สถานะ</label>
+                                    <select class="form-control form-control-user" id="updateProblemStatus"
+                                            name="updateProblemStatus">
+                                        <option value="IN-PROGRESS" selected>อยู่ระหว่างดำเนินการ</option>
+                                        <option value="RESOLVED">แก้ไขเรียบร้อย</option>
+                                        <option value="REJECTED">ปฏิเสธ</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="updateProblemReason" class="form-label">รายละเอียด</label>
+                                    <textarea rows="5" class="form-control form-control-user" id="updateProblemReason"
+                                              name="updateProblemReason"
+                                              placeholder="รายละเอียด"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
+                <button id="btnUpdateProblem" class="btn btn-primary">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>

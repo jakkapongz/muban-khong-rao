@@ -1,0 +1,90 @@
+  <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 id="problemReportTitleHeader" class="m-0 font-weight-bold text-primary">รายการปัญหาของหมู่บ้านเราย้อนหลัง 30 วัน</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered nowrap" id="problemReportDataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>ลำดับที่</th>
+                        {% if current_user.role_name == 'ADMIN' %}
+                            <th></th>
+                        {% endif %}
+                        <th>หมวด</th>
+                        <th>หัวข้อ</th>
+                        <th>รายละเอียด</th>
+                        <th>สถานะ</th>
+                        <th>หมายเหตุ</th>
+                        <th>รูปภาพ</th>
+                        <th>เพิ่มโดย</th>
+                        <th>วันที่เพิ่ม</th>
+                        <th>แก้ไขโดย</th>
+                        <th>วันที่แก้ไข</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set row_num = namespace(value=0) %}
+                    {% for problem_report in problem_reports %}
+                        <tr>
+                            <td>{{ row_num.value + 1 }}</td>
+                            {% if current_user.role_name == 'ADMIN' %}
+                            <td>
+                                {% if problem_report.problem_report_status == 'INIT' or problem_report.problem_report_status == 'IN-PROGRESS' %}
+                                    <a href="#" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-cogs"
+                                           onclick="updateData('Problem','problem',{{ problem_report.problem_report_id }})"
+                                           ></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                            <td>
+                                {% if problem_report.category_name == 'ไฟฟ้า' %}
+                                    <span class="border-bottom-warning">{{ problem_report.category_name }}</span>
+                                {% elif problem_report.category_name == 'ประปา' %}
+                                    <span class="border-bottom-primary">{{ problem_report.category_name }}</span>
+                                {% else %}
+                                    <span class="border-bottom-secondary">{{ problem_report.category_name }}</span>
+                                {% endif %}
+                            </td>
+                            <td id="row_problem_name_{{ problem_report.problem_report_id }}">{{ problem_report.problem_report_title }}</td>
+                            <td class="text-wrap">{{ problem_report.problem_report_description }}</td>
+                            <td>
+                                 {% if problem_report.problem_report_status == 'INIT' %}
+                                    <span class="border-bottom-warning">สร้างใหม่</span>
+                                {% elif problem_report.problem_report_status == 'IN-PROGRESS' %}
+                                    <span class="border-bottom-primary">อยู่ระหว่างดำเนินการ</span>
+                                {% elif problem_report.problem_report_status == 'RESOLVED' %}
+                                    <span class="border-bottom-success">แก้ไขเรียบร้อย</span>
+                                {% elif problem_report.problem_report_status == 'REJECTED' %}
+                                    <span class="border-bottom-danger">ปฏิเสธ</span>
+                                {% else %}
+                                    <span class="border-bottom-secondary">{{ problem_report.category_name }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if problem_report.problem_report_remark != None %}
+                                    {{ problem_report.problem_report_remark }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if problem_report.problem_image != None %}
+                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                                       data-target="#imagePreviewModal" onclick="showImage('รูปปัญหา','{{ problem_report.problem_image }}')">
+                                        <i class="fas fa-camera"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td>{{ problem_report.created_by }}</td>
+                            <td>{{ problem_report.created_datetime }}</td>
+                            <td>{{ problem_report.updated_by }}</td>
+                            <td>{{ problem_report.updated_datetime }}</td>
+                        </tr>
+                        {% set row_num.value = row_num.value + 1 %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

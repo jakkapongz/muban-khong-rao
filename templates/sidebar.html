@@ -1,0 +1,59 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/main">
+        <div class="sidebar-brand-icon">
+            <i class="fas fa-home"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">หมู่บ้านของเรา</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        เมนู
+    </div>
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" href="/main">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>หน้าแรก</span></a>
+    </li>
+
+    <li class="nav-item active">
+        <a class="nav-link" href="/visitors">
+            <i class="fas fa-fw fa-car"></i>
+            <span>ผู้มาติดต่อ</span></a>
+    </li>
+
+    {% if current_user.role_name == 'VILLAGER' or current_user.role_name == 'ADMIN' %}
+        <li class="nav-item active">
+            <a class="nav-link" href="/problem-reports">
+                <i class="fas fa-fw fa-comment-dots"></i>
+                <span>แจ้งปัญหา</span></a>
+        </li>
+    {% endif %}
+
+    {% if current_user.role_name == 'SECURITY' or current_user.role_name == 'ADMIN' %}
+            <li class="nav-item active">
+                <a class="nav-link" href="/patrolling-reports">
+                    <i class="fas fa-fw fa-clock"></i>
+                    <span>การเดินตรวจตรา</span></a>
+            </li>
+    {% endif %}
+
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
+<!-- End of Sidebar -->

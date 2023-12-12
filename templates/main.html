@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+
+{% block custom_css %}
+    <!-- Custom styles for this page -->
+    <link href="{{ url_for('static', filename='sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.css') }}"
+          rel="stylesheet">
+    <link href="{{ url_for('static', filename='sb-admin-2/vendor/css/responsive.bootstrap4.min.css') }}"
+          rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-2 text-gray-800">หน้าแรก</h1>
+    </div>
+
+    {% include "visitor_table.html" %}
+
+    {% include "problem_report_table.html" %}
+
+    {% include "patrolling_report_table.html" %}
+
+    {% include "image_preview_modal.html" %}
+
+    {% include "update_visitor_modal.html" %}
+
+    {% if current_user.role_name == 'ADMIN' %}
+        {% include "update_problem_report.html" %}
+    {% endif %}
+
+{% endblock %}
+
+{% block custom_js %}
+    <!-- Page level plugins -->
+
+    <script src="{{ url_for('static', filename='sb-admin-2/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='sb-admin-2/vendor/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='sb-admin-2/vendor/datatables/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='mubankhongrao.js') }}"></script>
+
+    <script>
+        // Call the dataTables jQuery plugin
+        $(document).ready(function () {
+            $('#visitorTitleHeader').text('รายชื่อผู้มาติดต่อวันนี้')
+            $('#problemReportTitleHeader').text('รายการปัญหาของหมู่บ้านเราวันนี้')
+            $('#patrollingReportTitleHeader').text('รายการเดินตรวจตราวันนี้')
+        });
+
+    </script>
+
+{% endblock %}
